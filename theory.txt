@@ -1,0 +1,115 @@
+Theory & Defence Notes for Library Information System
+====================================================
+
+1. Project Overview
+-------------------
+- Назва: «Бібліотека» (курсовий проєкт, варіант 20).
+- Призначення: керування книжковим фондом, читачами, прокатом, платежами та оповіщеннями.
+- Архітектура: тришарова (presentation → service → data).
+
+2. Використані технології
+-------------------------
+- Python 3.12 — основна мова реалізації.
+- Flask 3.0 — веб-фреймворк (REST + HTML).
+- Flask-SQLAlchemy 3.1 / SQLAlchemy 2.0 — ORM та керування транзакціями.
+- SQLite 3 — файлова база даних `library.db`.
+- Jinja2 — шаблонізатор для HTML сторінок.
+- Bootstrap 5 — UI-стилізація.
+- Pillow — генерація діаграм (use case, class).
+- Pytest — юніт-тестування бізнес-логіки.
+
+3. Шаблони проектування (GoF)
+-----------------------------
+- Singleton (`library_app/config.py::Database`) — гарантує один екземпляр SQLAlchemy.
+- Factory Method (`library_app/services/reader_factory.py`) — створення читачів різних категорій.
+- Strategy (`library_app/services/discount_strategy.py`) — політики знижок за типом читача.
+- Observer (`library_app/services/notification_service.py`) — сповіщення про прострочені прокати.
+- Repository (`library_app/repositories/…`) — шар доступу до БД, що ізолює SQL від бізнес-логіки.
+
+4. Детальний опис файлів
+------------------------
+- `library_app/__init__.py` — експонує фабрику застосунку `create_app`.
+- `library_app/app.py` — створює Flask app, підключає blueprints, ініціалізує сервіс сповіщень, реєструє шаблонні функції.
+- `library_app/config.py` — налаштування Flask, Singleton для `SQLAlchemy`, ініціалізація розширень.
+- `library_app/models/__init__.py` — захоплює інстанс БД для моделей.
+- `library_app/models/book.py` — модель книги + методи керування кількістю примірників.
+- `library_app/models/reader.py` — модель читача, enum категорій (REGULAR, PRIVILEGED, VIP).
+- `library_app/models/rental.py` — модель прокату, зв’язки book/reader/payments.
+- `library_app/models/payment.py` — платежі, сума, дата оплати.
+- `library_app/models/notification.py` — сповіщення читачів, прапор прочитано/непрочитано.
+- `library_app/models/user.py` — акаунти з ролями admin/user та посиланням на читача.
+- `library_app/repositories/__init__.py` — базовий репозиторій (CRUD, фільтрація через select).
+- `library_app/repositories/book_repository.py` — пошук доступних книг.
+- `library_app/repositories/reader_repository.py` — вибірка читачів по категорії.
+- `library_app/repositories/rental_repository.py` — активні/прострочені прокати.
+- `library_app/repositories/payment_repository.py` — платежі у діапазоні дат.
+- `library_app/repositories/notification_repository.py` — непрочитані сповіщення.
+- `library_app/repositories/user_repository.py` — пошук користувачів, перевірка наявності admin.
+- `library_app/services/__init__.py` — створює singleton-екземпляри репозиторіїв.
+- `library_app/services/discount_strategy.py` — реалізація Strategy; обрахунок знижки.
+- `library_app/services/reader_factory.py` — Factory Method; породжує читачів обраної категорії.
+- `library_app/services/auth_service.py` — реєстрація, аутентифікація, декоратори доступу.
+- `library_app/services/notification_service.py` — Observer; observers для подій прокату, створення сповіщень.
+- `library_app/services/rental_service.py` — основна бізнес-логіка: видача, повернення, штрафи, платежі.
+- `library_app/services/report_service.py` — збір даних для звітів (інвентар, прострочки, фінанси).
+- `library_app/controllers/books_controller.py` — CRUD маршрути для книг (HTML + JSON).
+- `library_app/controllers/readers_controller.py` — керування читачами.
+- `library_app/controllers/rentals_controller.py` — оформлення/повернення прокату, запуск перевірки прострочень.
+- `library_app/controllers/reports_controller.py` — оглядові сторінки + фінансовий REST.
+- `library_app/controllers/notifications_controller.py` — перегляд сповіщень.
+- `library_app/controllers/auth_controller.py` — вхід, реєстрація, завантаження сесії.
+- `library_app/controllers/store_controller.py` — користувацький каталог, оренда, особистий кабінет.
+- `library_app/templates/*.html` — Jinja2-шаблони з Bootstrap (base, auth, store, books, readers, rentals, reports, notifications).
+- `library_app/static/` — місце для ресурсів (за потреби).
+- `library_app/report/use_case_diagram.png` — діаграма варіантів використання (створена Pillow).
+- `library_app/report/class_diagram.png` — діаграма класів (створена Pillow).
+- `docs/coursework.md` — розгорнута документація для курсового захисту.
+- `README.md` — швидкий старт, патерни, інструкції з запуску.
+- `tests/conftest.py` — фікстури Flask app + тестового клієнта.
+- `tests/test_services.py` — тести для Factory, Strategy, RentalService та Notifications.
+- `tests/test_auth.py` — тести для реєстрації, ролей та сесій.
+- `requirements.txt` — перелік залежностей.
+
+5. Логіка захисту проекту перед викладачем
+-----------------------------------------
+- Показати дерево файлів і тришарову структуру (controllers → services → repositories/models).
+- Наголосити на вимогах завдання та тому, як вони виконані:
+  * REST маршрути `/auth`, `/store`, `/books`, `/readers`, `/rentals`, `/reports`, `/notifications`.
+  * Frontend на Bootstrap для адміністратора та клієнта; адаптація під мобільні пристрої.
+  * Повний цикл: самореєстрація користувача → додавання книги → оренда → повернення → платежі → сповіщення.
+- Пояснити кожен патерн на конкретному прикладі коду:
+  * Singleton — показати `Database.instance()` і спільний доступ в моделях.
+  * Factory Method — створення читачів з потрібною категорією в контролері.
+  * Strategy — показати розрахунок знижки в `RentalService.return_book`.
+  * Observer — як `NotificationService.notify_overdue` створює сповіщення.
+  * Repository — розділення доступу до БД і сервісів.
+- Демонстрація UI:
+  * `auth/signup` → перший користувач стає адміністратором.
+  * `store/catalog`: пошук, оформлення оренди звичайним користувачем.
+  * `store/my_rentals`: особистий кабінет із статусами та штрафами.
+  * `books.html`: введення книги.
+  * `rentals.html`: видача, повернення, кнопка «Перевірити прострочення».
+  * `reports.html`: таблиці, фінансовий AJAX-звіт.
+- Описати тестування: `PYTHONPATH=$PWD pytest`; тести на стратегії, штрафи, сповіщення й авторизацію.
+- Пояснити використання Pillow для діаграм як частину документації.
+- Озвучити плани розвитку: email/SMS-сповіщення, онлайн-оплати, розширена аналітика, роль бібліотекаря.
+
+6. Ключові акценти на захисті
+-----------------------------
+- Системність: тришарова архітектура → легка підтримка й розширення.
+- Чистий код: патерни, репозиторії, сервіси → дотримання SOLID.
+- Повнота вимог: всі сутності, звіти, UI, документація, діаграми.
+- Практичність: приклад використання (послідовність дій користувача).
+- Надійність: тести, можливість швидко переналаштувати базу (SQLite файлом).
+- Безпека: хешовані паролі, контроль сесій, розмежування доступу admin/user.
+
+7. Поради під час демонстрації
+------------------------------
+- Мати підготовлену БД зі стартовими даними (див. список рекомендованих книг).
+- Відкрито показати код сервісу прокату та патерни.
+- Тримати напоготові діаграми (`report/*.png`) та coursework.md як «шпаргалку».
+- Вміти відповісти, чому кожен патерн доречний у своїй частині системи.
+- Бути готовим продемонструвати pytest (`pytest -q`) після встановлення залежностей.
+- Почати демонстрацію з реєстрації/входу, показати різницю між користувачем і адміністратором.
+*** End Patch
+

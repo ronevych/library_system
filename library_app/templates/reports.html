@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Звіти{% endblock %}
+{% block content %}
+<h1 class="mb-4">Аналітика</h1>
+<div class="row">
+  <div class="col-lg-6 mb-4">
+    <div class="card">
+      <div class="card-header">Книжковий фонд</div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Назва</th>
+              <th>Автор</th>
+              <th>Доступно</th>
+              <th>Видано</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in inventory %}
+            <tr>
+              <td>{{ item.title }}</td>
+              <td>{{ item.author }}</td>
+              <td>{{ item.available_copies }}</td>
+              <td>{{ item.lent_out }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="text-center">Немає даних</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Прострочені книги</div>
+      <div class="card-body">
+        <ul class="list-group">
+          {% for item in overdue %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ item.book }}</strong><br>
+              <small>{{ item.reader }}</small>
+            </div>
+            <span class="badge bg-danger">{{ item.days_overdue }} днів</span>
+          </li>
+          {% else %}
+          <li class="list-group-item text-center text-muted">Прострочень немає</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">Фінансовий звіт</div>
+  <div class="card-body">
+    <form id="financial-form" class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Період з</label>
+        <input type="date" name="start" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Період до</label>
+        <input type="date" name="end" class="form-control" required>
+      </div>
+      <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Розрахувати</button>
+      </div>
+    </form>
+    <div id="financial-result" class="alert alert-info mt-3 d-none"></div>
+  </div>
+</div>
+<script>
+document.getElementById("financial-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const params = new URLSearchParams(new FormData(form));
+  const response = await fetch(`/reports/financial?${params.toString()}`);
+  const result = document.getElementById("financial-result");
+  if (response.ok) {
+    const data = await response.json();
+    result.textContent = `Надходження: ${data.total_income.toFixed(2)} грн (платежів: ${data.payments_count})`;
+    result.classList.remove("d-none", "alert-danger");
+    result.classList.add("alert-info");
+  } else {
+    const data = await response.json();
+    result.textContent = data.error || "Помилка розрахунку";
+    result.classList.remove("d-none", "alert-info");
+    result.classList.add("alert-danger");
+  }
+});
+</script>
+{% endblock %}
+

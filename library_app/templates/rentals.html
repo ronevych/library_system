@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% set is_overdue_view = view == 'overdue' %}
+{% block title %}Прокат{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Оренда книг{% if is_overdue_view %} — прострочення{% endif %}</h1>
+  <div>
+    {% if is_overdue_view %}
+      <a class="btn btn-secondary" href="{{ url_for('rentals.list_rentals') }}">Усі прокати</a>
+    {% else %}
+      <form action="{{ url_for('rentals.trigger_overdue_check') }}" method="post">
+        <button class="btn btn-warning">Перевірити прострочення</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-8">
+    <table class="table table-bordered align-middle">
+      <thead>
+        <tr>
+          <th>Книга</th>
+          <th>Читач</th>
+          <th>Дата видачі</th>
+          <th>Термін</th>
+          <th>Повернення</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rental in rentals %}
+        <tr class="{% if not rental.is_returned and rental.due_date < now().date() %}table-danger{% endif %}">
+          <td>{{ rental.book.title }}</td>
+          <td>{{ rental.reader.full_name }}</td>
+          <td>{{ rental.rent_date }}</td>
+          <td>{{ rental.due_date }}</td>
+          <td>
+            {% if rental.is_returned %}
+            Повернено {{ rental.return_date }}
+            {% else %}
+            <form action="/rentals/{{ rental.id }}/return" method="post" class="d-flex gap-2">
+              <input type="date" name="return_date" class="form-control" value="{{ now().date() }}">
+              <button class="btn btn-success">Повернути</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="text-center">
+            {% if is_overdue_view %}
+              Прострочених прокатів немає
+            {% else %}
+              Записів немає
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if not is_overdue_view %}
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">Видати книгу</div>
+      <div class="card-body">
+        <form action="{{ url_for('rentals.create_rental') }}" method="post">
+          <div class="mb-2">
+            <label class="form-label">Книга</label>
+            <select name="book_id" class="form-select">
+              {% for book in books %}
+              <option value="{{ book.id }}">{{ book.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Читач</label>
+            <select name="reader_id" class="form-select">
+              {% for reader in readers %}
+              <option value="{{ reader.id }}">{{ reader.full_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Кількість днів</label>
+            <input type="number" name="days" class="form-control" value="14">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Оформити</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+

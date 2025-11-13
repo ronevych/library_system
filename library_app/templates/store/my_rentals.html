@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Мої оренди{% endblock %}
+{% block content %}
+<div class="mb-4">
+  <h1 class="h3">Мої орендовані книги</h1>
+  <p class="text-muted mb-0">Перевірте статус своїх замовлень та заборгованість.</p>
+</div>
+
+{% if rentals %}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Книга</th>
+        <th>Дата видачі</th>
+        <th>Повернути до</th>
+        <th>Повернено</th>
+        <th>Штраф</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rental in rentals %}
+      <tr class="{% if not rental.is_returned and rental.due_date < now().date() %}table-warning{% endif %}">
+        <td>
+          <strong>{{ rental.book.title }}</strong><br>
+          <small class="text-muted">{{ rental.book.author }}</small>
+        </td>
+        <td>{{ rental.rent_date }}</td>
+        <td>{{ rental.due_date }}</td>
+        <td>
+          {% if rental.is_returned %}
+          {{ rental.return_date }}
+          {% else %}
+          <span class="badge bg-secondary">У користуванні</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if rental.fine_amount %}
+          {{ "%.2f"|format(rental.fine_amount) }} грн
+          {% else %}
+          —
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+  Ви ще не маєте оформлених оренд. Перейдіть до <a href="{{ url_for('store.catalog') }}">каталогу</a> та оберіть книгу.
+</div>
+{% endif %}
+{% endblock %}
+

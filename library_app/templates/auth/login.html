@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Вхід{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-header text-center">
+        <h2 class="h5 mb-0">Вхід до системи</h2>
+      </div>
+      <div class="card-body">
+        <form method="post" action="{{ url_for('auth.login_submit') }}">
+          <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+          <div class="mb-3">
+            <label class="form-label">Електронна пошта</label>
+            <input type="email" name="email" class="form-control" required autofocus>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Пароль</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Увійти</button>
+        </form>
+        <p class="text-center mt-3 mb-0">
+          Немає акаунта?
+          <a href="{{ url_for('auth.signup_form') }}">Зареєструватись</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
