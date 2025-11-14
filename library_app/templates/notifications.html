@@ -2,27 +2,29 @@
 {% block title %}Сповіщення{% endblock %}
 {% block content %}
 <h1 class="mb-4">Повідомлення читачів</h1>
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Читач</th>
-      <th>Повідомлення</th>
-      <th>Статус</th>
-      <th>Створено</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for notification in notifications %}
-    <tr class="{% if not notification.is_read %}table-warning{% endif %}">
-      <td>{{ notification.reader.full_name }}</td>
-      <td>{{ notification.message }}</td>
-      <td>{{ "Прочитано" if notification.is_read else "Не прочитано" }}</td>
-      <td>{{ notification.created_at }}</td>
-    </tr>
-    {% else %}
-    <tr><td colspan="4" class="text-center">Немає сповіщень</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>Читач</th>
+        <th>Повідомлення</th>
+        <th>Статус</th>
+        <th>Створено</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for notification in notifications %}
+      <tr class="{% if not notification.is_read %}table-warning{% endif %}">
+        <td class="text-nowrap">{{ notification.reader.full_name }}</td>
+        <td>{{ notification.message }}</td>
+        <td class="text-nowrap">{{ "Прочитано" if notification.is_read else "Не прочитано" }}</td>
+        <td class="text-nowrap">{{ notification.created_at }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center">Немає сповіщень</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
 

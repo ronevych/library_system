@@ -16,47 +16,50 @@
 </div>
 
 <div class="row">
-  <div class="col-12"> <table class="table table-bordered align-middle">
-      <thead>
-        <tr>
-          <th>Книга</th>
-          <th>Читач</th>
-          <th>Дата видачі</th>
-          <th>Термін</th>
-          <th>Повернення</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for rental in rentals %}
-        <tr class="{% if not rental.is_returned and rental.due_date < now().date() %}table-danger{% endif %}">
-          <td>{{ rental.book.title }}</td>
-          <td>{{ rental.reader.full_name }}</td>
-          <td>{{ rental.rent_date }}</td>
-          <td>{{ rental.due_date }}</td>
-          <td>
-            {% if rental.is_returned %}
-            Повернено {{ rental.return_date }}
-            {% else %}
-            <form action="/rentals/{{ rental.id }}/return" method="post" class="d-flex gap-2">
-              <input type="date" name="return_date" class="form-control" value="{{ now().date() }}">
-              <button class="btn btn-success">return⏎</button>
-            </form>
-            {% endif %}
-          </td>
-        </tr>
-        {% else %}
-        <tr>
-          <td colspan="5" class="text-center">
-            {% if is_overdue_view %}
-              Прострочених прокатів немає
-            {% else %}
-              Записів немає
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="col-12">
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead>
+          <tr>
+            <th>Книга</th>
+            <th>Читач</th>
+            <th>Дата видачі</th>
+            <th>Термін</th>
+            <th>Повернення</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rental in rentals %}
+          <tr class="{% if not rental.is_returned and rental.due_date < now().date() %}table-danger{% endif %}">
+            <td>{{ rental.book.title }}</td>
+            <td>{{ rental.reader.full_name }}</td>
+            <td class="text-nowrap">{{ rental.rent_date }}</td>
+            <td class="text-nowrap">{{ rental.due_date }}</td>
+            <td>
+              {% if rental.is_returned %}
+              <span class="text-nowrap">Повернено {{ rental.return_date }}</span>
+              {% else %}
+              <form action="/rentals/{{ rental.id }}/return" method="post" class="d-flex gap-2 align-items-center">
+                <input type="date" name="return_date" class="form-control form-control-sm" value="{{ now().date() }}" style="max-width: 150px;">
+                <button class="btn btn-success btn-sm">Повернути</button>
+              </form>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="text-center">
+              {% if is_overdue_view %}
+                Прострочених прокатів немає
+              {% else %}
+                Записів немає
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div> {% if not is_overdue_view %}
 <div class="row mt-4"> <div class="col-12"> <div class="card">

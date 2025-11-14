@@ -7,28 +7,30 @@
     <div class="card">
       <div class="card-header">Книжковий фонд</div>
       <div class="card-body">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th>Назва</th>
-              <th>Автор</th>
-              <th>Доступно</th>
-              <th>Видано</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in inventory %}
-            <tr>
-              <td>{{ item.title }}</td>
-              <td>{{ item.author }}</td>
-              <td>{{ item.available_copies }}</td>
-              <td>{{ item.lent_out }}</td>
-            </tr>
-            {% else %}
-            <tr><td colspan="4" class="text-center">Немає даних</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr>
+                <th>Назва</th>
+                <th>Автор</th>
+                <th class="text-center">Доступно</th>
+                <th class="text-center">Видано</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in inventory %}
+              <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.author }}</td>
+                <td class="text-center">{{ item.available_copies }}</td>
+                <td class="text-center">{{ item.lent_out }}</td>
+              </tr>
+              {% else %}
+              <tr><td colspan="4" class="text-center">Немає даних</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -72,22 +74,24 @@
               <div class="accordion-body">
                 <h6>Оренди по книгах:</h6>
                 {% if reader_info.book_rentals %}
-                <table class="table table-sm table-hover">
-                  <thead>
-                    <tr>
-                      <th>Назва книги</th>
-                      <th>Кількість оренд</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for book_rental in reader_info.book_rentals %}
-                    <tr>
-                      <td>{{ book_rental.book_title }}</td>
-                      <td><span class="badge bg-primary">{{ book_rental.rental_count }}</span></td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th>Назва книги</th>
+                        <th class="text-center">Кількість оренд</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for book_rental in reader_info.book_rentals %}
+                      <tr>
+                        <td>{{ book_rental.book_title }}</td>
+                        <td class="text-center"><span class="badge bg-primary">{{ book_rental.rental_count }}</span></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
                 {% else %}
                 <p class="text-muted">Читач ще не брав книг в оренду</p>
                 {% endif %}

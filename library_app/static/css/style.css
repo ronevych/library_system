@@ -121,8 +121,10 @@ body::before {
 
 .navbar-text {
   color: var(--text-dark) !important;
-  padding-top: var(--spacing-md);
-  padding-bottom: var(--spacing-md);
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .navbar::after {
@@ -378,6 +380,27 @@ body::before {
   vertical-align: middle;
 }
 
+/* Вирівнювання тексту в таблицях */
+.table td,
+.table th {
+  text-align: left;
+}
+
+.table td.text-center,
+.table th.text-center {
+  text-align: center;
+}
+
+.table td.text-right,
+.table th.text-right {
+  text-align: right;
+}
+
+/* Text nowrap для дат та коротких значень */
+.text-nowrap {
+  white-space: nowrap;
+}
+
 /* ============================================
    Buttons - Advanced Interactions
    ============================================ */
@@ -388,17 +411,19 @@ body::before {
   border: none;
   border-radius: 12px;
   font-weight: 600;
-  /* ЗМІНЕНО: 
-    Використовуємо 0.5rem (var(--spacing-sm)) 
-    та 1rem (var(--spacing-md)) 
-  */
-  padding: 0.5rem 2rem 0.5rem 0.5rem;
+  padding: var(--spacing-md) var(--spacing-lg);
   transition: all var(--transition-base);
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 0.875rem;
   box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+.btn-sm {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.8rem;
 }
 
 .btn::before {
@@ -924,21 +949,159 @@ h1::after {
 }
 
 /* ============================================
-   Responsive Design
+   Responsive Design - Advanced
    ============================================ */
 
-@media (max-width: 768px) {
+/* Mobile First Approach */
+@media (max-width: 575.98px) {
+  /* Extra small devices (portrait phones) */
+  .container {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+  
   .card {
     border-radius: 16px;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .card-header {
+    padding: var(--spacing-md);
+    font-size: 1rem;
+  }
+  
+  .card-body {
+    padding: var(--spacing-md);
   }
   
   .table {
+    font-size: 0.8rem;
+    border-radius: 12px;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: var(--spacing-sm) var(--spacing-xs);
+  }
+  
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.75rem;
+    width: 100%;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+  
+  .navbar-text {
     font-size: 0.875rem;
+    margin-right: var(--spacing-sm) !important;
+  }
+  
+  /* Table responsive wrapper */
+  .table-responsive {
+    border-radius: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Stack forms on mobile */
+  .row > [class*="col-"] {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  /* Stock input adjustments */
+  .stock-input {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .stock-input input {
+    width: 60px;
+    font-size: 0.9rem;
+  }
+  
+  .stock-input .btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  /* Small devices (landscape phones) */
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: var(--spacing-md);
   }
   
   .btn {
     padding: var(--spacing-sm) var(--spacing-md);
     font-size: 0.8rem;
+  }
+  
+  .card {
+    border-radius: 16px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  /* Medium devices (tablets) */
+  .table {
+    font-size: 0.9rem;
+  }
+  
+  .btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  /* Large devices (desktops) */
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* Extra large devices (large desktops) */
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .navbar,
+  .btn,
+  .card-header {
+    display: none;
+  }
+  
+  .table {
+    border: 1px solid #000;
+  }
+  
+  .table thead {
+    background: #f0f0f0 !important;
   }
 }
 

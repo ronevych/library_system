@@ -25,16 +25,16 @@
           <strong>{{ rental.book.title }}</strong><br>
           <small class="text-muted">{{ rental.book.author }}</small>
         </td>
-        <td>{{ rental.rent_date }}</td>
-        <td>{{ rental.due_date }}</td>
-        <td>
+        <td class="text-nowrap">{{ rental.rent_date }}</td>
+        <td class="text-nowrap">{{ rental.due_date }}</td>
+        <td class="text-nowrap">
           {% if rental.is_returned %}
           {{ rental.return_date }}
           {% else %}
           <span class="badge bg-secondary">У користуванні</span>
           {% endif %}
         </td>
-        <td>
+        <td class="text-nowrap">
           {% if rental.fine_amount %}
           {{ "%.2f"|format(rental.fine_amount) }} грн
           {% else %}
