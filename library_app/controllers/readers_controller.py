@@ -83,6 +83,20 @@ def update_reader(reader_id: int):
     return jsonify({"status": "updated"})
 
 
+@readers_bp.post("/<int:reader_id>/category")
+def update_category(reader_id: int):
+    reader = reader_repository.get(reader_id)
+    if reader is None:
+        flash("Читача не знайдено", "danger")
+        return redirect(url_for("readers.list_readers"))
+    
+    new_category = ReaderCategory(request.form.get("category", ReaderCategory.REGULAR))
+    reader.category = new_category
+    db.session.commit()
+    flash(f"Категорію читача змінено на {new_category.value} ✅", "success")
+    return redirect(url_for("readers.list_readers"))
+
+
 @readers_bp.delete("/<int:reader_id>")
 def delete_reader(reader_id: int):
     reader = reader_repository.get(reader_id)

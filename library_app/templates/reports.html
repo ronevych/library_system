@@ -53,7 +53,54 @@
     </div>
   </div>
 </div>
-<div class="card">
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">Інформація про читачів</div>
+      <div class="card-body">
+        <div class="accordion" id="readersAccordion">
+          {% for reader_info in readers_info %}
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading{{ reader_info.reader_id }}">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ reader_info.reader_id }}" aria-expanded="false" aria-controls="collapse{{ reader_info.reader_id }}">
+                <strong>{{ reader_info.reader_name }}</strong>
+                <span class="badge bg-secondary ms-2">{{ reader_info.reader_category }}</span>
+                <span class="ms-2 text-muted">(Всього оренд: {{ reader_info.total_rentals }}, Активних: {{ reader_info.active_rentals }})</span>
+              </button>
+            </h2>
+            <div id="collapse{{ reader_info.reader_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ reader_info.reader_id }}" data-bs-parent="#readersAccordion">
+              <div class="accordion-body">
+                <h6>Оренди по книгах:</h6>
+                {% if reader_info.book_rentals %}
+                <table class="table table-sm table-hover">
+                  <thead>
+                    <tr>
+                      <th>Назва книги</th>
+                      <th>Кількість оренд</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for book_rental in reader_info.book_rentals %}
+                    <tr>
+                      <td>{{ book_rental.book_title }}</td>
+                      <td><span class="badge bg-primary">{{ book_rental.rental_count }}</span></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">Читач ще не брав книг в оренду</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mt-4">
   <div class="card-header">Фінансовий звіт</div>
   <div class="card-body">
     <form id="financial-form" class="row g-3">

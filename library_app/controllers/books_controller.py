@@ -88,6 +88,24 @@ def update_book(book_id: int):
     return jsonify({"status": "updated"})
 
 
+@books_bp.post("/<int:book_id>/stock")
+def update_stock(book_id: int):
+    book = book_repository.get(book_id)
+    if book is None:
+        flash("Книгу не знайдено", "danger")
+        return redirect(url_for("books.list_books"))
+    
+    new_stock = int(request.form.get("available_copies", book.available_copies))
+    if new_stock < 0:
+        flash("Кількість не може бути від'ємною", "danger")
+        return redirect(url_for("books.list_books"))
+    
+    book.available_copies = new_stock
+    db.session.commit()
+    flash(f"Запас книги '{book.title}' оновлено до {new_stock} примірників ✅", "success")
+    return redirect(url_for("books.list_books"))
+
+
 @books_bp.delete("/<int:book_id>")
 def delete_book(book_id: int):
     book = book_repository.get(book_id)

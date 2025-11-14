@@ -1,0 +1,908 @@
+/* ============================================
+   Senior Front-End Developer Level Styling
+   Advanced CSS with modern techniques
+   ============================================ */
+
+:root {
+  /* Color Palette - Soft & Modern */
+  --primary-soft: #a8d5e2;
+  --primary-light: #d4e9f0;
+  --primary-dark: #7fb8c9;
+  --secondary-soft: #f4e4c1;
+  --accent-soft: #e8c5a0;
+  --success-soft: #c8e6c9;
+  --warning-soft: #fff9c4;
+  --danger-soft: #ffccbc;
+  --info-soft: #b3e5fc;
+  --bg-soft: #fafafa;
+  --card-soft: #ffffff;
+  --text-soft: #5a5a5a;
+  --text-dark: #2c3e50;
+  --border-soft: #e0e0e0;
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  
+  /* Shadows - Layered depth */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
+  --shadow-colored: 0 8px 32px rgba(168, 213, 226, 0.3);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ============================================
+   Base Styles with Advanced Techniques
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 50%, #f5f7fa 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  color: var(--text-soft);
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated background gradient */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Subtle pattern overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(168, 213, 226, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(244, 228, 193, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+/* ============================================
+   Navigation - Glassmorphism Effect
+   ============================================ */
+
+.navbar {
+  background: linear-gradient(135deg, 
+    rgba(168, 213, 226, 0.95) 0%, 
+    rgba(212, 233, 240, 0.95) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all var(--transition-base);
+}
+
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(168, 213, 226, 0.5), 
+    transparent);
+}
+
+.navbar-brand {
+  color: var(--text-dark) !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.5px;
+  position: relative;
+  transition: transform var(--transition-base);
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.navbar-brand::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--text-dark);
+  transition: width var(--transition-base);
+}
+
+.navbar-brand:hover::after {
+  width: 100%;
+}
+
+.nav-link {
+  color: var(--text-dark) !important;
+  font-weight: 500;
+  position: relative;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+  margin: 0 var(--spacing-xs);
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-link:hover {
+  color: var(--text-dark) !important;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   Cards - Neumorphism + Glassmorphism Hybrid
+   ============================================ */
+
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent);
+  transition: left var(--transition-slow);
+}
+
+.card:hover::before {
+  left: 100%;
+}
+
+.card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-lg), var(--shadow-colored);
+  border-color: rgba(168, 213, 226, 0.4);
+}
+
+.card-header {
+  background: linear-gradient(135deg, 
+    rgba(212, 233, 240, 0.8) 0%, 
+    rgba(168, 213, 226, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding: var(--spacing-lg);
+  position: relative;
+}
+
+.card-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(168, 213, 226, 0.5), 
+    transparent);
+}
+
+.card-body {
+  padding: var(--spacing-lg);
+}
+
+/* ============================================
+   Tables - Advanced Styling
+   ============================================ */
+
+.table {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+.table thead {
+  background: linear-gradient(135deg, 
+    rgba(212, 233, 240, 0.9) 0%, 
+    rgba(168, 213, 226, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-dark);
+  position: relative;
+}
+
+.table thead::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(168, 213, 226, 0.6), 
+    transparent);
+}
+
+.table thead th {
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: var(--spacing-lg);
+  color: var(--text-dark);
+  position: relative;
+}
+
+.table thead th:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(168, 213, 226, 0.3);
+}
+
+.table tbody tr {
+  transition: all var(--transition-fast);
+  position: relative;
+  border-bottom: 1px solid rgba(224, 224, 224, 0.3);
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table tbody tr::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, 
+    var(--primary-soft), 
+    var(--primary-light));
+  opacity: 0;
+  transform: scaleY(0);
+  transition: all var(--transition-base);
+}
+
+.table tbody tr:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.table tbody tr:hover {
+  background: linear-gradient(90deg, 
+    rgba(212, 233, 240, 0.4) 0%, 
+    rgba(212, 233, 240, 0.1) 100%);
+  transform: translateX(4px);
+  box-shadow: inset 4px 0 0 var(--primary-soft);
+}
+
+.table tbody td {
+  padding: var(--spacing-lg);
+  border: none;
+  vertical-align: middle;
+}
+
+/* ============================================
+   Buttons - Advanced Interactions
+   ============================================ */
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: var(--spacing-md) var(--spacing-lg);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width var(--transition-base), height var(--transition-base);
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, 
+    var(--primary-soft) 0%, 
+    var(--primary-dark) 100%);
+  color: var(--text-dark);
+  box-shadow: var(--shadow-md), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, 
+    var(--primary-dark) 0%, 
+    var(--primary-soft) 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--shadow-colored);
+  color: var(--text-dark);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, 
+    var(--success-soft) 0%, 
+    #a5d6a7 100%);
+  color: var(--text-dark);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, 
+    #a5d6a7 0%, 
+    var(--success-soft) 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, 
+    var(--danger-soft) 0%, 
+    #ffab91 100%);
+  color: var(--text-dark);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, 
+    #ffab91 0%, 
+    var(--danger-soft) 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, 
+    var(--warning-soft) 0%, 
+    #fff59d 100%);
+  color: var(--text-dark);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, 
+    #fff59d 0%, 
+    var(--warning-soft) 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-outline-light {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-dark);
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   Forms - Modern Input Styling
+   ============================================ */
+
+.form-control,
+.form-select {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--border-soft);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  transition: all var(--transition-base);
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--primary-soft);
+  box-shadow: 
+    0 0 0 4px rgba(168, 213, 226, 0.2),
+    var(--shadow-sm);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.form-control:hover,
+.form-select:hover {
+  border-color: var(--primary-light);
+}
+
+.form-label {
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+/* Input number with custom styling */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ============================================
+   Alerts - Glassmorphism
+   ============================================ */
+
+.alert {
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  padding: var(--spacing-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.alert::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+.alert-success {
+  background: rgba(200, 230, 201, 0.7);
+  color: var(--text-dark);
+}
+
+.alert-info {
+  background: rgba(179, 229, 252, 0.7);
+  color: var(--text-dark);
+}
+
+.alert-warning {
+  background: rgba(255, 249, 196, 0.7);
+  color: var(--text-dark);
+}
+
+.alert-danger {
+  background: rgba(255, 204, 188, 0.7);
+  color: var(--text-dark);
+}
+
+/* ============================================
+   Badges - Modern Design
+   ============================================ */
+
+.badge {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.badge:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.bg-primary {
+  background: linear-gradient(135deg, 
+    var(--primary-soft), 
+    var(--primary-dark)) !important;
+  color: var(--text-dark);
+}
+
+.bg-secondary {
+  background: linear-gradient(135deg, 
+    var(--secondary-soft), 
+    #e8d4a8) !important;
+  color: var(--text-dark);
+}
+
+.bg-success {
+  background: linear-gradient(135deg, 
+    var(--success-soft), 
+    #a5d6a7) !important;
+  color: var(--text-dark);
+}
+
+.bg-danger {
+  background: linear-gradient(135deg, 
+    var(--danger-soft), 
+    #ffab91) !important;
+  color: var(--text-dark);
+}
+
+.bg-warning {
+  background: linear-gradient(135deg, 
+    var(--warning-soft), 
+    #fff59d) !important;
+  color: var(--text-dark);
+}
+
+/* ============================================
+   Accordion - Advanced Animation
+   ============================================ */
+
+.accordion-item {
+  border: 1px solid var(--glass-border);
+  border-radius: 16px !important;
+  margin-bottom: var(--spacing-md);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.accordion-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.accordion-button {
+  background: linear-gradient(135deg, 
+    rgba(212, 233, 240, 0.8) 0%, 
+    rgba(168, 213, 226, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-dark);
+  font-weight: 600;
+  border-radius: 16px !important;
+  padding: var(--spacing-lg);
+  transition: all var(--transition-base);
+}
+
+.accordion-button:not(.collapsed) {
+  background: linear-gradient(135deg, 
+    rgba(168, 213, 226, 0.9) 0%, 
+    rgba(127, 184, 201, 0.9) 100%);
+  color: var(--text-dark);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.accordion-button:focus {
+  box-shadow: 0 0 0 4px rgba(168, 213, 226, 0.3);
+  border-color: var(--primary-soft);
+}
+
+.accordion-body {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: var(--spacing-lg);
+}
+
+/* ============================================
+   List Group
+   ============================================ */
+
+.list-group-item {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-soft);
+  transition: all var(--transition-fast);
+  border-radius: 12px !important;
+  margin-bottom: var(--spacing-xs);
+}
+
+.list-group-item:hover {
+  background: linear-gradient(90deg, 
+    rgba(212, 233, 240, 0.6) 0%, 
+    rgba(212, 233, 240, 0.2) 100%);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+   Special Effects
+   ============================================ */
+
+.table-warning {
+  background: linear-gradient(90deg, 
+    rgba(255, 249, 196, 0.4) 0%, 
+    rgba(255, 249, 196, 0.1) 100%) !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-dark);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  position: relative;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--primary-soft), 
+    transparent);
+  border-radius: 2px;
+}
+
+/* Text utilities */
+.text-muted {
+  color: #8a8a8a !important;
+}
+
+/* Input group */
+.input-group-sm .form-select {
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+/* Inline forms in tables */
+.table tbody tr td form {
+  margin: 0;
+  display: inline-block;
+}
+
+/* Stock input styling - Advanced */
+.stock-input {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: var(--spacing-xs);
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  transition: all var(--transition-base);
+}
+
+.stock-input:hover {
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-sm);
+}
+
+.stock-input input {
+  width: 80px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.stock-input input:focus {
+  border-color: var(--primary-soft);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 3px rgba(168, 213, 226, 0.2);
+}
+
+.stock-input .btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  min-width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: all var(--transition-fast);
+}
+
+.stock-input .btn:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-sm);
+}
+
+.stock-input .btn:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   Animations & Micro-interactions
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Fade in animation for content */
+.container > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Loading shimmer effect */
+.shimmer {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .card {
+    border-radius: 16px;
+  }
+  
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.8rem;
+  }
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--primary-soft);
+  outline-offset: 2px;
+}

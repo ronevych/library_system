@@ -21,7 +21,19 @@
           <td>{{ reader.full_name }}</td>
           <td>{{ reader.address }}</td>
           <td>{{ reader.phone }}</td>
-          <td>{{ reader.category.value }}</td>
+          <td>
+            <form method="post" action="{{ url_for('readers.update_category', reader_id=reader.id) }}" class="d-inline">
+              <div class="input-group input-group-sm">
+                <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+                  {% for category in categories %}
+                  <option value="{{ category.value }}" {% if reader.category == category %}selected{% endif %}>
+                    {{ category.value }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </form>
+          </td>
         </tr>
         {% else %}
         <tr><td colspan="4" class="text-center">Читачів поки немає</td></tr>

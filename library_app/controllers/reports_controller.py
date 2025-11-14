@@ -20,10 +20,12 @@ def ensure_admin():
 def overview():
     inventory = report_service.book_inventory_report()
     overdue = report_service.overdue_report()
+    readers_info = report_service.readers_rental_report()
     return render_template(
         "reports.html",
         inventory=inventory,
         overdue=overdue,
+        readers_info=readers_info,
     )
 
 

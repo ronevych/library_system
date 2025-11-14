@@ -21,7 +21,20 @@
           <td>{{ book.title }}</td>
           <td>{{ book.author }}</td>
           <td>{{ book.genre }}</td>
-          <td>{{ book.available_copies }}</td>
+          <td>
+            <form method="post" action="{{ url_for('books.update_stock', book_id=book.id) }}" class="stock-input" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseStock({{ book.id }})" style="padding: 0.25rem 0.5rem; min-width: 36px; height: 36px; border-radius: 8px; font-weight: 600;">−</button>
+              <input type="number" 
+                     id="stock-{{ book.id }}" 
+                     name="available_copies" 
+                     value="{{ book.available_copies }}" 
+                     min="0" 
+                     class="form-control form-control-sm" 
+                     style="width: 80px; text-align: center; font-weight: 600; font-size: 1rem;"
+                     onchange="this.form.submit()">
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseStock({{ book.id }})" style="padding: 0.25rem 0.5rem; min-width: 36px; height: 36px; border-radius: 8px; font-weight: 600;">+</button>
+            </form>
+          </td>
         </tr>
         {% else %}
         <tr><td colspan="4" class="text-center">Немає книг</td></tr>
@@ -64,5 +77,22 @@
     </div>
   </div>
 </div>
+<script>
+function increaseStock(bookId) {
+  const input = document.getElementById('stock-' + bookId);
+  const currentValue = parseInt(input.value) || 0;
+  input.value = currentValue + 1;
+  input.form.submit();
+}
+
+function decreaseStock(bookId) {
+  const input = document.getElementById('stock-' + bookId);
+  const currentValue = parseInt(input.value) || 0;
+  if (currentValue > 0) {
+    input.value = currentValue - 1;
+    input.form.submit();
+  }
+}
+</script>
 {% endblock %}
 

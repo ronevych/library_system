@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+from typing import Any
 
 from library_app.services import book_repository, payment_repository, rental_repository
 
@@ -26,6 +27,16 @@ class OverdueRentalItem:
 class FinancialSummary:
     total_income: float
     payments_count: int
+
+
+@dataclass
+class ReaderRentalInfo:
+    reader_id: int
+    reader_name: str
+    reader_category: str
+    total_rentals: int
+    active_rentals: int
+    book_rentals: list[dict[str, Any]]  # [{book_title, rental_count}]
 
 
 class ReportService:
@@ -63,6 +74,39 @@ class ReportService:
         total = sum(payment.total_amount for payment in payments)
         return FinancialSummary(total_income=total, payments_count=len(payments))
 
+    def readers_rental_report(self) -> list[ReaderRentalInfo]:
+        from library_app.services import reader_repository
+        from collections import Counter
+        
+        readers_info: list[ReaderRentalInfo] = []
+        
+        for reader in reader_repository.all():
+            rentals = rental_repository.for_reader(reader.id, active_only=False)
+            active_rentals = rental_repository.for_reader(reader.id, active_only=True)
+            
+            # Підрахунок кількості оренд по кожній книзі
+            book_counter = Counter()
+            for rental in rentals:
+                book_counter[rental.book.title] += 1
+            
+            book_rentals = [
+                {"book_title": title, "rental_count": count}
+                for title, count in book_counter.items()
+            ]
+            
+            readers_info.append(
+                ReaderRentalInfo(
+                    reader_id=reader.id,
+                    reader_name=reader.full_name,
+                    reader_category=reader.category.value,
+                    total_rentals=len(rentals),
+                    active_rentals=len(active_rentals),
+                    book_rentals=book_rentals,
+                )
+            )
+        
+        return readers_info
+
 
 report_service = ReportService()
 
@@ -71,6 +115,7 @@ __all__ = [
     "BookInventoryItem",
     "OverdueRentalItem",
     "FinancialSummary",
+    "ReaderRentalInfo",
     "report_service",
 ]
 
