@@ -4,16 +4,16 @@
    ============================================ */
 
 :root {
-  /* Color Palette - Soft & Modern */
-  --primary-soft: #a8d5e2;
-  --primary-light: #d4e9f0;
-  --primary-dark: #7fb8c9;
+  /* Color Palette - Soft & Modern (Orange Theme) */
+  --primary-soft: #FFB770;
+  --primary-light: #FEC796; /* Змінено з #d4e9f0 */
+  --primary-dark: #FF985E;
   --secondary-soft: #f4e4c1;
   --accent-soft: #e8c5a0;
   --success-soft: #c8e6c9;
   --warning-soft: #fff9c4;
   --danger-soft: #ffccbc;
-  --info-soft: #b3e5fc;
+  --info-soft: #FEC796;
   --bg-soft: #fafafa;
   --card-soft: #ffffff;
   --text-soft: #5a5a5a;
@@ -29,7 +29,8 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
-  --shadow-colored: 0 8px 32px rgba(168, 213, 226, 0.3);
+  /* Змінено колір тіні з блакитного на оранжевий */
+  --shadow-colored: 0 8px 32px rgba(255, 152, 94, 0.3); 
   
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -54,7 +55,8 @@
 }
 
 body {
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 50%, #f5f7fa 100%);
+  /* Змінено фон з сіро-блакитного на сіро-бежевий */
+  background: linear-gradient(135deg, #fdfaf6 0%, #fdf3e7 50%, #fdfaf6 100%);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   color: var(--text-soft);
@@ -84,7 +86,8 @@ body::before {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 50%, rgba(168, 213, 226, 0.03) 0%, transparent 50%),
+    /* Змінено блакитний градієнт на оранжевий */
+    radial-gradient(circle at 20% 50%, rgba(255, 183, 112, 0.03) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(244, 228, 193, 0.03) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
@@ -101,9 +104,10 @@ body::before {
    ============================================ */
 
 .navbar {
+  /* Змінено блакитний градієнт на оранжевий */
   background: linear-gradient(135deg, 
-    rgba(168, 213, 226, 0.95) 0%, 
-    rgba(212, 233, 240, 0.95) 100%) !important;
+    rgba(255, 183, 112, 0.95) 0%, 
+    rgba(254, 199, 150, 0.95) 100%) !important;
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--glass-border);
@@ -112,6 +116,13 @@ body::before {
   top: 0;
   z-index: 1000;
   transition: all var(--transition-base);
+  align-items: center;
+}
+
+.navbar-text {
+  color: var(--text-dark) !important;
+  padding-top: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
 }
 
 .navbar::after {
@@ -123,7 +134,7 @@ body::before {
   height: 1px;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(168, 213, 226, 0.5), 
+    rgba(255, 183, 112, 0.5), /* Змінено з блакитного */
     transparent);
 }
 
@@ -228,13 +239,14 @@ body::before {
 .card:hover {
   transform: translateY(-4px) scale(1.01);
   box-shadow: var(--shadow-lg), var(--shadow-colored);
-  border-color: rgba(168, 213, 226, 0.4);
+  border-color: rgba(255, 183, 112, 0.4); /* Змінено з блакитного */
 }
 
 .card-header {
+  /* Змінено блакитний градієнт на оранжевий */
   background: linear-gradient(135deg, 
-    rgba(212, 233, 240, 0.8) 0%, 
-    rgba(168, 213, 226, 0.8) 100%);
+    rgba(254, 199, 150, 0.8) 0%, 
+    rgba(255, 183, 112, 0.8) 100%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--text-dark);
@@ -254,7 +266,7 @@ body::before {
   height: 1px;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(168, 213, 226, 0.5), 
+    rgba(255, 183, 112, 0.5), /* Змінено з блакитного */
     transparent);
 }
 
@@ -277,9 +289,10 @@ body::before {
 }
 
 .table thead {
+  /* Змінено блакитний градієнт на оранжевий */
   background: linear-gradient(135deg, 
-    rgba(212, 233, 240, 0.9) 0%, 
-    rgba(168, 213, 226, 0.9) 100%);
+    rgba(254, 199, 150, 0.9) 0%, 
+    rgba(255, 183, 112, 0.9) 100%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--text-dark);
@@ -295,7 +308,7 @@ body::before {
   height: 2px;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(168, 213, 226, 0.6), 
+    rgba(255, 183, 112, 0.6), /* Змінено з блакитного */
     transparent);
 }
 
@@ -317,7 +330,7 @@ body::before {
   top: 20%;
   height: 60%;
   width: 1px;
-  background: rgba(168, 213, 226, 0.3);
+  background: rgba(255, 183, 112, 0.3); /* Змінено з блакитного */
 }
 
 .table tbody tr {
@@ -351,9 +364,10 @@ body::before {
 }
 
 .table tbody tr:hover {
+  /* Змінено блакитний фон на оранжевий */
   background: linear-gradient(90deg, 
-    rgba(212, 233, 240, 0.4) 0%, 
-    rgba(212, 233, 240, 0.1) 100%);
+    rgba(254, 199, 150, 0.4) 0%, 
+    rgba(254, 199, 150, 0.1) 100%);
   transform: translateX(4px);
   box-shadow: inset 4px 0 0 var(--primary-soft);
 }
@@ -374,7 +388,11 @@ body::before {
   border: none;
   border-radius: 12px;
   font-weight: 600;
-  padding: var(--spacing-md) var(--spacing-lg);
+  /* ЗМІНЕНО: 
+    Використовуємо 0.5rem (var(--spacing-sm)) 
+    та 1rem (var(--spacing-md)) 
+  */
+  padding: 0.5rem 2rem 0.5rem 0.5rem;
   transition: all var(--transition-base);
   cursor: pointer;
   text-transform: uppercase;
@@ -486,17 +504,51 @@ body::before {
    Forms - Modern Input Styling
    ============================================ */
 
-.form-control,
+/* 1. ЗАМІНІТЬ ВАШ .form-control, .form-select 
+      НА ЦІ ДВА ОКРЕМІ БЛОКИ */
+
+/* Стиль для звичайних полів вводу */
+.form-control {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 1rem; /* (1rem з усіх боків - тут це нормально) */
+  transition: all var(--transition-base);
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+/* Окремий стиль для ВЕЛИКИХ випадаючих списків */
 .form-select {
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 2px solid var(--border-soft);
   border-radius: 12px;
-  padding: var(--spacing-md);
+  /* Використовуємо 4 значення: [верх] [право] [низ] [ліво]
+    "право" (2.5rem) - це відступ для стрілки.
+  */
+  padding: 1rem 2.5rem 1rem 1rem;
   transition: all var(--transition-base);
   font-size: 0.95rem;
   color: var(--text-dark);
+}
+
+/* 2. ДОДАЙТЕ ЦЕЙ НОВИЙ БЛОК ДЛЯ ЕЛЕМЕНТА 
+      З ВАШОГО СКРІНШОТА */
+.form-select-sm {
+  /* Ті ж стилі, але з меншими відступами (padding) 
+    та розміром шрифту (font-size)
+  */
+  padding: 0.5rem 1rem 0.5rem 0.75rem !important; 
+  /* (використовуємо !important, щоб 
+     гарантовано перебити стилі Bootstrap) */
+  font-size: 0.875rem;
+  
+  /* Переконуємось, що заокруглення однакове */
+  border-radius: 12px;
 }
 
 .form-control:focus,
@@ -504,7 +556,7 @@ body::before {
   background: rgba(255, 255, 255, 0.9);
   border-color: var(--primary-soft);
   box-shadow: 
-    0 0 0 4px rgba(168, 213, 226, 0.2),
+    0 0 0 4px rgba(255, 183, 112, 0.2), /* Змінено з блакитного */
     var(--shadow-sm);
   outline: none;
   transform: translateY(-1px);
@@ -567,7 +619,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .alert-info {
-  background: rgba(179, 229, 252, 0.7);
+  background: rgba(254, 199, 150, 0.7); /* Змінено з блакитного */
   color: var(--text-dark);
 }
 
@@ -659,9 +711,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .accordion-button {
+  /* Змінено блакитний градієнт на оранжевий */
   background: linear-gradient(135deg, 
-    rgba(212, 233, 240, 0.8) 0%, 
-    rgba(168, 213, 226, 0.8) 100%);
+    rgba(254, 199, 150, 0.8) 0%, 
+    rgba(255, 183, 112, 0.8) 100%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--text-dark);
@@ -672,15 +725,16 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .accordion-button:not(.collapsed) {
+  /* Змінено блакитний градієнт на оранжевий */
   background: linear-gradient(135deg, 
-    rgba(168, 213, 226, 0.9) 0%, 
-    rgba(127, 184, 201, 0.9) 100%);
+    rgba(255, 183, 112, 0.9) 0%, 
+    rgba(255, 152, 94, 0.9) 100%);
   color: var(--text-dark);
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .accordion-button:focus {
-  box-shadow: 0 0 0 4px rgba(168, 213, 226, 0.3);
+  box-shadow: 0 0 0 4px rgba(255, 183, 112, 0.3); /* Змінено з блакитного */
   border-color: var(--primary-soft);
 }
 
@@ -707,9 +761,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .list-group-item:hover {
+  /* Змінено блакитний фон на оранжевий */
   background: linear-gradient(90deg, 
-    rgba(212, 233, 240, 0.6) 0%, 
-    rgba(212, 233, 240, 0.2) 100%);
+    rgba(254, 199, 150, 0.6) 0%, 
+    rgba(254, 199, 150, 0.2) 100%);
   transform: translateX(4px);
   box-shadow: var(--shadow-sm);
 }
@@ -795,7 +850,7 @@ h1::after {
 .stock-input input:focus {
   border-color: var(--primary-soft);
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 0 3px rgba(168, 213, 226, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 183, 112, 0.2); /* Змінено з блакитного */
 }
 
 .stock-input .btn {

@@ -14,9 +14,9 @@
     {% endif %}
   </div>
 </div>
+
 <div class="row">
-  <div class="col-lg-8">
-    <table class="table table-bordered align-middle">
+  <div class="col-12"> <table class="table table-bordered align-middle">
       <thead>
         <tr>
           <th>Книга</th>
@@ -39,7 +39,7 @@
             {% else %}
             <form action="/rentals/{{ rental.id }}/return" method="post" class="d-flex gap-2">
               <input type="date" name="return_date" class="form-control" value="{{ now().date() }}">
-              <button class="btn btn-success">Повернути</button>
+              <button class="btn btn-success">return⏎</button>
             </form>
             {% endif %}
           </td>
@@ -58,9 +58,8 @@
       </tbody>
     </table>
   </div>
-  {% if not is_overdue_view %}
-  <div class="col-lg-4">
-    <div class="card">
+</div> {% if not is_overdue_view %}
+<div class="row mt-4"> <div class="col-12"> <div class="card">
       <div class="card-header">Видати книгу</div>
       <div class="card-body">
         <form action="{{ url_for('rentals.create_rental') }}" method="post">
@@ -89,7 +88,7 @@
       </div>
     </div>
   </div>
-  {% endif %}
 </div>
-{% endblock %}
+{% endif %}
 
+{% endblock %}

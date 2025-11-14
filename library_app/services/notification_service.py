@@ -30,7 +30,7 @@ class OverdueRentalObserver(NotificationObserver):
         # Тільки для прострочених (більше 0 днів)
         if days_overdue > 0:
             message = (
-                f"Книга '{rental.book.title}' прострочена на {days_overdue} дн{'ів' if days_overdue > 1 else 'я'}⚠️ "
+                f"Книга {rental.book.title} прострочена на {days_overdue} дн{'ів' if days_overdue > 1 else 'я'}⚠️ "
                 f"Дата повернення: {rental.due_date:%d.%m.%Y}."
             )
             notification = Notification(reader_id=rental.reader_id, message=message)
@@ -45,7 +45,7 @@ class DueDateRentalObserver(NotificationObserver):
         if event != "rental_due_today":
             return
         rental: Rental = payload["rental"]
-        message = f"Сьогодні останній день оренди⚠️ Книга '{rental.book.title}' має бути повернена сьогодні ({rental.due_date:%d.%m.%Y})"
+        message = f"Сьогодні останній день оренди⚠️ Книга {rental.book.title} має бути повернена сьогодні ({rental.due_date:%d.%m.%Y})"
         notification = Notification(reader_id=rental.reader_id, message=message)
         self.repo.add(notification)
 
