@@ -31,7 +31,7 @@
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
             {% if is_authenticated() %}
             <li class="nav-item d-flex align-items-center">
-              <span class="navbar-text me-3 mb-0">
+              <span class="navbar-text me-3 mb-0 profile-trigger" style="cursor: pointer; user-select: none;" onclick="openProfileOverlay()">
                 {{ current_user().full_name }}{% if current_user().is_admin() %} (адмін){% endif %}
               </span>
             </li>
@@ -63,7 +63,103 @@
       {% endwith %}
       {% block content %}{% endblock %}
     </main>
+    
+    <!-- Profile Overlay -->
+    {% if is_authenticated() %}
+    <div id="profileOverlay" class="profile-overlay">
+      <div class="profile-overlay-backdrop" onclick="closeProfileOverlay()"></div>
+      <div class="profile-overlay-content">
+        <div class="profile-overlay-header">
+          <h3 class="profile-overlay-title">Профіль</h3>
+          <button class="profile-overlay-close" onclick="closeProfileOverlay()" aria-label="Закрити">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="profile-overlay-body" id="profileContent">
+          <div class="profile-loading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Завантаження...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Profile Overlay Functions
+      function openProfileOverlay() {
+        const overlay = document.getElementById('profileOverlay');
+        if (!overlay) return;
+        
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Load profile data
+        loadProfileData();
+      }
+      
+      function closeProfileOverlay() {
+        const overlay = document.getElementById('profileOverlay');
+        if (!overlay) return;
+        
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      
+      async function loadProfileData() {
+        const content = document.getElementById('profileContent');
+        if (!content) return;
+        
+        try {
+          const response = await fetch('/auth/profile');
+          if (!response.ok) {
+            throw new Error('Failed to load profile');
+          }
+          
+          const data = await response.json();
+          
+          content.innerHTML = `
+            <div class="profile-info">
+              <div class="profile-avatar">
+                <div class="profile-avatar-circle">
+                  ${data.full_name.charAt(0).toUpperCase()}
+                </div>
+              </div>
+              <div class="profile-name">${data.full_name}</div>
+              <div class="profile-category">
+                <span class="badge bg-primary">${data.category}</span>
+              </div>
+              
+              <div class="profile-stats">
+                <div class="profile-stat-item">
+                  <div class="profile-stat-value">${data.books_read}</div>
+                  <div class="profile-stat-label">Прочитано книг</div>
+                </div>
+                <div class="profile-stat-item">
+                  <div class="profile-stat-value">${data.favorite_genre}</div>
+                  <div class="profile-stat-label">Улюблений жанр</div>
+                </div>
+              </div>
+            </div>
+          `;
+        } catch (error) {
+          content.innerHTML = `
+            <div class="alert alert-danger">
+              Помилка завантаження профілю. Спробуйте пізніше.
+            </div>
+          `;
+        }
+      }
+      
+      // Close overlay on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeProfileOverlay();
+        }
+      });
+    </script>
   </body>
 </html>
 

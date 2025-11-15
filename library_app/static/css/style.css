@@ -1126,3 +1126,229 @@ h1::after {
   outline: 2px solid var(--primary-soft);
   outline-offset: 2px;
 }
+
+/* ============================================
+   Profile Overlay - Instagram Style
+   ============================================ */
+
+.profile-trigger {
+  transition: all var(--transition-fast);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 8px;
+}
+
+.profile-trigger:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-base), visibility var(--transition-base);
+  pointer-events: none;
+}
+
+.profile-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.profile-overlay-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.profile-overlay-content {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-xl);
+  width: 90%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow: hidden;
+  transform: scale(0.9) translateY(20px);
+  transition: transform var(--transition-bounce);
+  z-index: 1;
+}
+
+.profile-overlay.active .profile-overlay-content {
+  transform: scale(1) translateY(0);
+}
+
+.profile-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--glass-border);
+  background: linear-gradient(135deg, 
+    rgba(254, 199, 150, 0.8) 0%, 
+    rgba(255, 183, 112, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.profile-overlay-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: -0.5px;
+}
+
+.profile-overlay-close {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  line-height: 1;
+  padding: 0;
+}
+
+.profile-overlay-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: rotate(90deg);
+}
+
+.profile-overlay-body {
+  padding: var(--spacing-xl);
+  overflow-y: auto;
+  max-height: calc(90vh - 80px);
+}
+
+.profile-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-xl);
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-avatar {
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-avatar-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    var(--primary-soft) 0%, 
+    var(--primary-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 auto;
+  box-shadow: var(--shadow-md);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.5px;
+}
+
+.profile-category {
+  margin-bottom: var(--spacing-xl);
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--border-soft);
+}
+
+.profile-stat-item {
+  text-align: center;
+}
+
+.profile-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.2;
+}
+
+.profile-stat-label {
+  font-size: 0.875rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Responsive adjustments for profile overlay */
+@media (max-width: 575.98px) {
+  .profile-overlay-content {
+    width: 95%;
+    max-width: none;
+    border-radius: 20px 20px 0 0;
+    margin-top: auto;
+    margin-bottom: 0;
+  }
+  
+  .profile-overlay.active .profile-overlay-content {
+    transform: translateY(0);
+  }
+  
+  .profile-avatar-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+  
+  .profile-name {
+    font-size: 1.25rem;
+  }
+  
+  .profile-stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .profile-stats {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}

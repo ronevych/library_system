@@ -99,3 +99,25 @@ def logout():
         flash("Вихід виконано.", "info")
     return redirect(url_for("auth.login_form"))
 
+
+@auth_bp.get("/profile")
+def get_profile():
+    """API endpoint для отримання статистики профілю."""
+    from flask import jsonify
+    from library_app.services.auth_service import current_user
+    from library_app.services.profile_service import profile_service
+    
+    if not is_authenticated():
+        return jsonify({"error": "Authentication required"}), 401
+    
+    user = current_user()
+    if user is None or user.reader is None:
+        return jsonify({"error": "Reader profile not found"}), 404
+    
+    stats = profile_service.get_profile_stats(user.reader)
+    return jsonify({
+        "full_name": stats.full_name,
+        "category": stats.category,
+        "books_read": stats.books_read,
+        "favorite_genre": stats.favorite_genre,
+    })
