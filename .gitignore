@@ -3,5 +3,5 @@ venv/
 __pycache__/
 .pyc/
 library.db
-.cursor_instructions.md
 .vscode/
+cursor_instructions.md
