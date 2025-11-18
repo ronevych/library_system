@@ -26,6 +26,8 @@
             <li class="nav-item"><a class="nav-link" href="{{ url_for('rentals.list_rentals') }}">Прокат</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('reports.overview') }}">Звіти</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('notifications.list_notifications') }}">Сповіщення</a></li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('notifications.list_notifications') }}">Сповіщення</a></li>
             {% endif %}
           </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">

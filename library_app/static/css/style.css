@@ -606,6 +606,7 @@ body::before {
 /* Input number with custom styling */
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -804,6 +805,20 @@ input[type="number"]::-webkit-inner-spin-button {
   background: linear-gradient(90deg, 
     rgba(255, 249, 196, 0.4) 0%, 
     rgba(255, 249, 196, 0.1) 100%) !important;
+}
+
+/* Клікабельні рядки сповіщень */
+.notification-row {
+  transition: all var(--transition-fast);
+}
+
+.notification-row:hover {
+  transform: translateX(2px);
+}
+
+.notification-row[style*="cursor: pointer"]:hover {
+  background-color: rgba(254, 199, 150, 0.3) !important;
+  box-shadow: inset 4px 0 0 var(--primary-soft);
 }
 
 /* Headings */

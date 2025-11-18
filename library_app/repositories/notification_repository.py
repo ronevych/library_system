@@ -28,6 +28,11 @@ class NotificationRepository(BaseRepository[Notification]):
         )
         return list(self.filter(stmt))
 
+    def for_reader(self, reader_id: int) -> list[Notification]:
+        """Отримує всі сповіщення для конкретного читача."""
+        stmt = select(Notification).where(Notification.reader_id == reader_id).order_by(Notification.created_at.desc())
+        return list(self.filter(stmt))
+
 
 __all__ = ["NotificationRepository"]
 

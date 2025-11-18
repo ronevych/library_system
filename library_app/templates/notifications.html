@@ -1,12 +1,36 @@
 {% extends "base.html" %}
 {% block title %}Сповіщення{% endblock %}
 {% block content %}
-<h1 class="mb-4">Повідомлення читачів</h1>
+<h1 class="mb-4">{% if user_is_admin %}Повідомлення читачів{% else %}Мої повідомлення{% endif %}</h1>
+
+{% if user_is_admin %}
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="get" action="{{ url_for('notifications.list_notifications') }}" class="row g-3 align-items-end">
+      <div class="col-md-8">
+        <label class="form-label">Фільтр по читачу</label>
+        <select name="reader_id" class="form-select" onchange="this.form.submit()">
+          <option value="">Всі читачі</option>
+          {% for reader in readers %}
+          <option value="{{ reader.id }}" {% if selected_reader_id == reader.id %}selected{% endif %}>
+            {{ reader.full_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <a href="{{ url_for('notifications.list_notifications') }}" class="btn btn-outline-secondary w-100">Скинути фільтр</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
 <div class="table-responsive">
   <table class="table table-hover align-middle">
     <thead>
       <tr>
-        <th>Читач</th>
+        {% if user_is_admin %}<th>Читач</th>{% endif %}
         <th>Повідомлення</th>
         <th>Статус</th>
         <th>Створено</th>
@@ -14,17 +38,63 @@
     </thead>
     <tbody>
       {% for notification in notifications %}
-      <tr class="{% if not notification.is_read %}table-warning{% endif %}">
+      <tr class="notification-row {% if not notification.is_read %}table-warning{% endif %}" 
+          data-notification-id="{{ notification.id }}"
+          {% if not user_is_admin and not notification.is_read %}style="cursor: pointer;" onclick="markAsRead({{ notification.id }})"{% endif %}>
+        {% if user_is_admin %}
         <td class="text-nowrap">{{ notification.reader.full_name }}</td>
+        {% endif %}
         <td>{{ notification.message }}</td>
-        <td class="text-nowrap">{{ "Прочитано" if notification.is_read else "Не прочитано" }}</td>
-        <td class="text-nowrap">{{ notification.created_at }}</td>
+        <td class="text-nowrap">
+          {% if notification.is_read %}
+          <span class="badge bg-success">Прочитано</span>
+          {% else %}
+          <span class="badge bg-warning">Не прочитано</span>
+          {% endif %}
+        </td>
+        <td class="text-nowrap">{{ notification.created_at.strftime('%d.%m.%Y %H:%M') if notification.created_at else notification.created_at }}</td>
       </tr>
       {% else %}
-      <tr><td colspan="4" class="text-center">Немає сповіщень</td></tr>
+      <tr>
+        <td colspan="{% if user_is_admin %}4{% else %}3{% endif %}" class="text-center">Немає сповіщень</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
+
+<script>
+async function markAsRead(notificationId) {
+  try {
+    const response = await fetch(`/notifications/${notificationId}/mark-read`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      if (data.status === 'success') {
+        // Оновлюємо рядок таблиці
+        const row = document.querySelector(`tr[data-notification-id="${notificationId}"]`);
+        if (row) {
+          row.classList.remove('table-warning');
+          row.style.cursor = 'default';
+          row.onclick = null;
+          
+          // Оновлюємо badge статусу
+          const statusCell = row.querySelector('td:nth-last-child(2)');
+          if (statusCell) {
+            statusCell.innerHTML = '<span class="badge bg-success">Прочитано</span>';
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error marking notification as read:', error);
+  }
+}
+</script>
 {% endblock %}
 
