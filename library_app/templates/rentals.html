@@ -38,11 +38,16 @@
             <td>
               {% if rental.is_returned %}
               <span class="text-nowrap">Повернено {{ rental.return_date }}</span>
+              {% if rental.damage_amount > 0 %}
+              <span class="badge bg-danger ms-1" title="{{ rental.damage_comment or 'Без коментаря' }}">
+                Пошкодження: {{ rental.damage_amount }} грн
+              </span>
+              {% endif %}
               {% else %}
-              <form action="/rentals/{{ rental.id }}/return" method="post" class="d-flex gap-2 align-items-center">
-                <input type="date" name="return_date" class="form-control form-control-sm" value="{{ now().date() }}" style="max-width: 150px;">
-                <button class="btn btn-success btn-sm">Повернути</button>
-              </form>
+              <div class="d-flex gap-2 align-items-center">
+                <input type="date" id="return-date-{{ rental.id }}" class="form-control form-control-sm" value="{{ now().date() }}" style="max-width: 150px;">
+                <button class="btn btn-success btn-sm" onclick="openDamageModal({{ rental.id }}, '{{ rental.book.title }}', '{{ rental.reader.full_name }}')">Повернути</button>
+              </div>
               {% endif %}
             </td>
           </tr>
@@ -93,5 +98,117 @@
   </div>
 </div>
 {% endif %}
+
+<!-- Damage Modal -->
+<div id="damageModal" class="damage-overlay">
+  <div class="damage-overlay-backdrop" onclick="closeDamageModal()"></div>
+  <div class="damage-overlay-content">
+    <div class="damage-overlay-header">
+      <h3 class="damage-overlay-title">Повернення книги</h3>
+      <button class="damage-overlay-close" onclick="closeDamageModal()" aria-label="Закрити">
+        <span>&times;</span>
+      </button>
+    </div>
+    <div class="damage-overlay-body">
+      <div class="damage-book-info">
+        <div class="damage-book-title" id="damageBookTitle"></div>
+        <div class="damage-reader-name" id="damageReaderName"></div>
+      </div>
+      
+      <form id="damageForm" method="post">
+        <input type="hidden" name="return_date" id="damageReturnDate">
+        
+        <div class="damage-question">
+          <label class="form-label">Чи завдано книзі шкоду?</label>
+          <div class="damage-options">
+            <label class="damage-option">
+              <input type="radio" name="is_damaged" value="no" checked onchange="toggleDamageFields()">
+              <span class="damage-option-label">Ні</span>
+            </label>
+            <label class="damage-option">
+              <input type="radio" name="is_damaged" value="yes" onchange="toggleDamageFields()">
+              <span class="damage-option-label">Так</span>
+            </label>
+          </div>
+        </div>
+        
+        <div id="damageFields" class="damage-fields" style="display: none;">
+          <div class="mb-3">
+            <label class="form-label">Оцініть суму завданої шкоди (грн)</label>
+            <input type="number" name="damage_amount" id="damageAmount" class="form-control" min="0" step="0.01" placeholder="0.00">
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Коментар (що було пошкоджено)</label>
+            <textarea name="damage_comment" id="damageComment" class="form-control" rows="3" placeholder="Опишіть характер пошкодження..."></textarea>
+          </div>
+        </div>
+        
+        <div class="damage-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeDamageModal()">Скасувати</button>
+          <button type="submit" class="btn btn-success">Підтвердити</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentRentalId = null;
+  
+  function openDamageModal(rentalId, bookTitle, readerName) {
+    currentRentalId = rentalId;
+    
+    // Set book info
+    document.getElementById('damageBookTitle').textContent = '«' + bookTitle + '»';
+    document.getElementById('damageReaderName').textContent = readerName;
+    
+    // Set return date from the input
+    const returnDateInput = document.getElementById('return-date-' + rentalId);
+    document.getElementById('damageReturnDate').value = returnDateInput.value;
+    
+    // Set form action
+    document.getElementById('damageForm').action = '/rentals/' + rentalId + '/return';
+    
+    // Reset form
+    document.querySelector('input[name="is_damaged"][value="no"]').checked = true;
+    document.getElementById('damageAmount').value = '';
+    document.getElementById('damageComment').value = '';
+    toggleDamageFields();
+    
+    // Show modal
+    const modal = document.getElementById('damageModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeDamageModal() {
+    const modal = document.getElementById('damageModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    currentRentalId = null;
+  }
+  
+  function toggleDamageFields() {
+    const isDamaged = document.querySelector('input[name="is_damaged"]:checked').value === 'yes';
+    const damageFields = document.getElementById('damageFields');
+    
+    if (isDamaged) {
+      damageFields.style.display = 'block';
+      damageFields.style.animation = 'fadeInUp 0.3s ease-out';
+    } else {
+      damageFields.style.display = 'none';
+      document.getElementById('damageAmount').value = '';
+      document.getElementById('damageComment').value = '';
+    }
+  }
+  
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeDamageModal();
+    }
+  });
+</script>
 
 {% endblock %}

@@ -65,11 +65,37 @@ def create_rental():
 @rentals_bp.post("/<int:rental_id>/return")
 def return_rental(rental_id: int):
     data = request.get_json(silent=True) or {}
-    return_date = (
-        date.fromisoformat(data["return_date"]) if "return_date" in data else None
-    )
+    
+    # Parse return date
+    if "return_date" in data:
+        return_date = date.fromisoformat(data["return_date"])
+    elif request.form.get("return_date"):
+        return_date = date.fromisoformat(request.form["return_date"])
+    else:
+        return_date = None
+    
+    # Parse damage information
+    damage_amount = 0.0
+    damage_comment = None
+    
+    if data:
+        # JSON request
+        if data.get("is_damaged") == "yes":
+            damage_amount = float(data.get("damage_amount", 0) or 0)
+            damage_comment = data.get("damage_comment") or None
+    else:
+        # Form request
+        if request.form.get("is_damaged") == "yes":
+            damage_amount = float(request.form.get("damage_amount", 0) or 0)
+            damage_comment = request.form.get("damage_comment") or None
+    
     try:
-        summary = rental_service.return_book(rental_id, return_date=return_date)
+        summary = rental_service.return_book(
+            rental_id,
+            return_date=return_date,
+            damage_amount=damage_amount,
+            damage_comment=damage_comment,
+        )
     except RentalError as exc:
         db.session.rollback()
         if request.is_json:
@@ -83,6 +109,7 @@ def return_rental(rental_id: int):
                 "amount_due": summary.amount_due,
                 "discount_applied": summary.discount_applied,
                 "fine_amount": summary.fine_amount,
+                "damage_amount": summary.damage_amount,
                 "days_rented": summary.days_rented,
             }
         )
@@ -93,6 +120,8 @@ def return_rental(rental_id: int):
         f"Книга була у користуванні {summary.days_rented} днів. "
         f"Отримано {summary.amount_due:.2f} грн."
     )
+    if summary.damage_amount > 0:
+        message += f" (штраф за пошкодження: {summary.damage_amount:.2f} грн)"
     flash(message, "success")
     return redirect(url_for("rentals.list_rentals"))
 

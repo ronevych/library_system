@@ -25,6 +25,7 @@ class RentalSummary:
     amount_due: float
     discount_applied: float
     fine_amount: float
+    damage_amount: float
     days_rented: int
 
 
@@ -48,7 +49,13 @@ class RentalService:
         book_repository.update()
         return rental
 
-    def return_book(self, rental_id: int, return_date: date | None = None) -> RentalSummary:
+    def return_book(
+        self,
+        rental_id: int,
+        return_date: date | None = None,
+        damage_amount: float = 0.0,
+        damage_comment: str | None = None,
+    ) -> RentalSummary:
         rental = rental_repository.get(rental_id)
         if rental is None:
             raise RentalError("Rental not found")
@@ -76,7 +83,11 @@ class RentalService:
             fine = overdue_days * (book.daily_rent_price * 0.5)
         rental.fine_amount = fine
 
-        total = discounted_amount + fine
+        # Handle damage penalty
+        rental.damage_amount = damage_amount
+        rental.damage_comment = damage_comment
+
+        total = discounted_amount + fine + damage_amount
 
         payment = Payment(rental_id=rental.id, total_amount=total)
         payment_repository.add(payment)
@@ -88,6 +99,7 @@ class RentalService:
             amount_due=total,
             discount_applied=discount_value,
             fine_amount=fine,
+            damage_amount=damage_amount,
             days_rented=days_rented,
         )
         return summary

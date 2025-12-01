@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer
+from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from library_app.models import db
@@ -18,6 +18,8 @@ class Rental(db.Model):
     due_date: Mapped[date] = mapped_column(Date, nullable=False)
     return_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     fine_amount: Mapped[float] = mapped_column(Float, default=0.0)
+    damage_amount: Mapped[float] = mapped_column(Float, default=0.0)
+    damage_comment: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     book: Mapped["Book"] = relationship("Book", back_populates="rentals")
