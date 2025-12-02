@@ -99,7 +99,7 @@
 </div>
 {% endif %}
 
-<!-- Damage Modal -->
+
 <div id="damageModal" class="damage-overlay">
   <div class="damage-overlay-backdrop" onclick="closeDamageModal()"></div>
   <div class="damage-overlay-content">
@@ -160,7 +160,7 @@
     currentRentalId = rentalId;
     
     // Set book info
-    document.getElementById('damageBookTitle').textContent = '«' + bookTitle + '»';
+    document.getElementById('damageBookTitle').textContent = bookTitle;
     document.getElementById('damageReaderName').textContent = readerName;
     
     // Set return date from the input
